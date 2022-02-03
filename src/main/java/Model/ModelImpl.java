@@ -56,11 +56,27 @@ public class ModelImpl implements Model {
         return emptyTilesList;
     }
 
-    /***/
+    /**Суммирует значения 2ух рядом стоящих плиток в относительно левую, правую обнуляет значение.
+     * Если слияние удается (хотя бы 1), то вызывается метод moveTilesWithZeroValueRight.
+     * @return true если удалось хотя бы 1 слияние*/
     private boolean mergeTilesWithEqualsValue(Tile[] tilesLine) {
         boolean flag = false;
-        return flag;
+        Objects.requireNonNull(tilesLine, "tilesLine is null");
 
+        for (int i = 0; i < FIELD_SIZE - 1; i++) {
+            if (!tilesLine[i].isEmpty()
+                    && (tilesLine[i].getValue() == tilesLine[i + 1].getValue())) {
+                tilesLine[i].setValue(tilesLine[i].getValue() + tilesLine[i + 1].getValue());
+                tilesLine[i + 1].setValue(0);
+                score += tilesLine[i].getValue();
+                if (tilesLine[i].getValue() > maxTailValue) {
+                    maxTailValue = tilesLine[i].getValue();
+                }
+                flag = true;
+                moveTilesWithZeroValueRight(tilesLine);
+            }
+        }
+        return flag;
     }
 
     /**
@@ -79,7 +95,8 @@ public class ModelImpl implements Model {
                 flag = false;
                 for (int i = 0; i < FIELD_SIZE - 1; i++) {
                     if (Objects.nonNull(tilesLine[i]) && tilesLine[i].isEmpty()) {
-                        if (Objects.nonNull(tilesLine[i + 1]) && !tilesLine[i + 1].isEmpty()) {
+                        if (Objects.nonNull(tilesLine[i + 1])
+                                && (tilesLine[i + 1].getValue() != tilesLine[i].getValue())) {
                             swapTwoTiles(tilesLine, i, i + 1);
                             flag = true;
                             swap = true;
@@ -151,6 +168,6 @@ public class ModelImpl implements Model {
 
     @Override
     public boolean canMove() {
-    return false;
+        return false;
     }
 }

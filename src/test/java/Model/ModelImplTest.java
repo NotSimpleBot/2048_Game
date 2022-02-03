@@ -1,24 +1,21 @@
 package Model;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Objects;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 public class ModelImplTest {
     private Tile[] lineTilesTest;
-    Tile t1;
-    Tile t2;
-    Tile t3;
-    Tile t4;
-    private ModelImpl model;
+    private Tile t1;
+    private Tile t2;
+    private Tile t3;
+    private Tile t4;
 
     @Before
     public void setUp() throws Exception {
-        model = new ModelImpl();
         t1 = new Tile(0);
         t2 = new Tile(0);
         t3 = new Tile(2);
@@ -35,7 +32,50 @@ public class ModelImplTest {
         assertArrayEquals(expected, lineTilesTest);
     }
 
+    @Test
+    public void mergeTilesWithEqualsValueTest() {
+        int[] expected = new int[]{4, 0, 0, 0};
+        mergeTilesWithEqualsValue(lineTilesTest);
+        int[] actual = new int[4];
+        actual[0] = lineTilesTest[0].getValue();
+        actual[1] = lineTilesTest[1].getValue();
+        actual[2] = lineTilesTest[2].getValue();
+        actual[3] = lineTilesTest[3].getValue();
 
+        assertArrayEquals(expected, actual);
+    }
+
+
+    /**
+     * Суммирует значения 2ух рядом стоящих плиток в относительно левую, правую обнуляет значение.
+     * Если слияние удается (хотя бы 1), то вызывается метод moveTilesWithZeroValueRight.
+     *
+     * @return true если удалось хотя бы 1 слияние
+     */
+    private boolean mergeTilesWithEqualsValue(Tile[] tilesLine) {
+        boolean flag = false;
+        Objects.requireNonNull(tilesLine, "tilesLine is null");
+
+        for (int i = 0; i < 4 - 1; i++) {
+            if (!tilesLine[i].isEmpty()
+                    && (tilesLine[i].getValue() == tilesLine[i + 1].getValue())) {
+                tilesLine[i].setValue(tilesLine[i].getValue() + tilesLine[i + 1].getValue());
+                tilesLine[i + 1].setValue(0);
+
+                flag = true;
+                moveTilesWithZeroValueRight(tilesLine);
+            }
+        }
+        return flag;
+    }
+
+
+    /**
+     * Сдвигает все нули из левой части массива в правую,
+     * нули местами не меняет.
+     *
+     * @return true если был хотя бы один swap.
+     */
     private boolean moveTilesWithZeroValueRight(Tile[] tilesLine) {
         boolean swap = false;
         boolean flag = true;
@@ -46,7 +86,8 @@ public class ModelImplTest {
                 flag = false;
                 for (int i = 0; i < 4 - 1; i++) {
                     if (Objects.nonNull(tilesLine[i]) && tilesLine[i].isEmpty()) {
-                        if (Objects.nonNull(tilesLine[i + 1]) && !tilesLine[i + 1].isEmpty()) {
+                        if (Objects.nonNull(tilesLine[i + 1])
+                                && (tilesLine[i + 1].getValue() != tilesLine[i].getValue())) {
                             swapTwoTiles(tilesLine, i, i + 1);
                             flag = true;
                             swap = true;
@@ -58,6 +99,9 @@ public class ModelImplTest {
         return swap;
     }
 
+    /**
+     * Меняет значения двух плиток местами
+     */
     private void swapTwoTiles(Tile[] tilesLine, int x, int y) {
         Objects.requireNonNull(tilesLine[x], "t[x] is null");
         Objects.requireNonNull(tilesLine[y], "t[y] is null");
