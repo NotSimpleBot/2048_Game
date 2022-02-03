@@ -56,6 +56,41 @@ public class ModelImpl implements Model {
         return emptyTilesList;
     }
 
+    /***/
+    private boolean mergeTilesWithEqualsValue(Tile[] tilesLine) {
+        boolean flag = false;
+        return flag;
+
+    }
+
+    /**
+     * Сдвигает все нули из левой части массива в правую,
+     * нули местами не меняет.
+     *
+     * @return true если был хотя бы один swap.
+     */
+    private boolean moveTilesWithZeroValueRight(Tile[] tilesLine) {
+        boolean swap = false;
+        boolean flag = true;
+        Objects.requireNonNull(tilesLine, "tilesLine is null");
+
+        if (tilesLine.length > 0) {
+            while (flag) {
+                flag = false;
+                for (int i = 0; i < FIELD_SIZE - 1; i++) {
+                    if (Objects.nonNull(tilesLine[i]) && tilesLine[i].isEmpty()) {
+                        if (Objects.nonNull(tilesLine[i + 1]) && !tilesLine[i + 1].isEmpty()) {
+                            swapTwoTiles(tilesLine, i, i + 1);
+                            flag = true;
+                            swap = true;
+                        }
+                    }
+                }
+            }
+        }
+        return swap;
+    }
+
     @Override
     public void left() {
         boolean flag = false;
@@ -116,6 +151,6 @@ public class ModelImpl implements Model {
 
     @Override
     public boolean canMove() {
-
+    return false;
     }
 }
