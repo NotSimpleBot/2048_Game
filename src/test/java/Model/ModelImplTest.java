@@ -9,6 +9,7 @@ import static org.junit.Assert.assertArrayEquals;
 
 public class ModelImplTest {
     private Tile[] lineTilesTest;
+    private Tile[][] gameTiles;
     private Tile t1;
     private Tile t2;
     private Tile t3;
@@ -21,6 +22,11 @@ public class ModelImplTest {
         t3 = new Tile(2);
         t4 = new Tile(2);
         lineTilesTest = new Tile[]{t1, t2, t3, t4};
+        gameTiles = new Tile[][]{{new Tile(), new Tile(2), new Tile(2), new Tile()},
+                {new Tile(4), new Tile(4), new Tile(), new Tile()},
+                {new Tile(), new Tile(), new Tile(), new Tile()},
+                {new Tile(), new Tile(), new Tile(), new Tile()}};
+
     }
 
 
@@ -42,6 +48,24 @@ public class ModelImplTest {
         actual[2] = lineTilesTest[2].getValue();
         actual[3] = lineTilesTest[3].getValue();
 
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void rotateTo90_gameTilesTest() {
+        int[][] expected = new int[][]{{0, 0, 4, 0},
+                {0, 0, 4, 2},
+                {0, 0, 0, 2},
+                {0, 0, 0, 0}};
+        Tile[][] testArr = rotateTo90_gameTiles(1);
+        int[][] actual = new int[testArr.length][testArr.length];
+        for (int i = 0; i < testArr.length; i++) {
+            for (int j = 0; j < testArr.length; j++) {
+                System.out.print(testArr[i][j]);
+                actual[i][j] = testArr[i][j].getValue();
+            }
+            System.out.println();
+        }
         assertArrayEquals(expected, actual);
     }
 
@@ -108,5 +132,28 @@ public class ModelImplTest {
         Tile tileTmp = tilesLine[x];
         tilesLine[x] = tilesLine[y];
         tilesLine[y] = tileTmp;
+    }
+
+
+    /**
+     * Разворачивает массив gameTiles на 90градусов, нужно для упрощения
+     * реализации методов up, right, down --> теперь можно реализовать
+     * только left и далее вертеть массив данным методом и выполнять left.
+     *
+     * @param count сколько раз повернуть массив на 90градусов
+     * @return Tile[][] повернутый массив.
+     */
+    private Tile[][] rotateTo90_gameTiles(int count) {
+        Tile[][] gameTilesCopy = gameTiles;
+        for (int iter = 0; iter < count; iter++) {
+            Tile[][] tempTiles = new Tile[4][4];
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    tempTiles[i][j] = gameTilesCopy[4 - 1 - j][i];
+                }
+            }
+            gameTilesCopy = tempTiles;
+        }
+        return gameTilesCopy;
     }
 }

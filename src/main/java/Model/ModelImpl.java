@@ -56,9 +56,12 @@ public class ModelImpl implements Model {
         return emptyTilesList;
     }
 
-    /**Суммирует значения 2ух рядом стоящих плиток в относительно левую, правую обнуляет значение.
+    /**
+     * Суммирует значения 2ух рядом стоящих плиток в относительно левую, правую обнуляет значение.
      * Если слияние удается (хотя бы 1), то вызывается метод moveTilesWithZeroValueRight.
-     * @return true если удалось хотя бы 1 слияние*/
+     *
+     * @return true если удалось хотя бы 1 слияние
+     */
     private boolean mergeTilesWithEqualsValue(Tile[] tilesLine) {
         boolean flag = false;
         Objects.requireNonNull(tilesLine, "tilesLine is null");
@@ -111,21 +114,36 @@ public class ModelImpl implements Model {
     @Override
     public void left() {
         boolean flag = false;
+        for (int i = 0; i < FIELD_SIZE; i++) {
+            if (moveTilesWithZeroValueRight(gameTiles[i]) |
+                    mergeTilesWithEqualsValue(gameTiles[i])) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            addNewTile();
+        }
     }
 
     @Override
     public void right() {
-
+        rotateTo90_gameTiles(2);
+        left();
+        rotateTo90_gameTiles(2);
     }
 
     @Override
     public void up() {
-
+        rotateTo90_gameTiles(3);
+        left();
+        rotateTo90_gameTiles(1);
     }
 
     @Override
     public void down() {
-
+        rotateTo90_gameTiles(1);
+        left();
+        rotateTo90_gameTiles(3);
     }
 
     /**
@@ -151,8 +169,8 @@ public class ModelImpl implements Model {
         Tile[][] gameTilesCopy = gameTiles;
         for (int iter = 0; iter < count; iter++) {
             Tile[][] tempTiles = new Tile[FIELD_SIZE][FIELD_SIZE];
-            for (int i = 0; i < FIELD_SIZE - 1; i++) {
-                for (int j = 0; j < FIELD_SIZE - 1; j++) {
+            for (int i = 0; i < FIELD_SIZE; i++) {
+                for (int j = 0; j < FIELD_SIZE; j++) {
                     tempTiles[i][j] = gameTilesCopy[FIELD_SIZE - 1 - j][i];
                 }
             }
@@ -166,7 +184,7 @@ public class ModelImpl implements Model {
         return gameTiles;
     }
 
-    @Override
+    @Override   
     public boolean canMove() {
         return false;
     }
