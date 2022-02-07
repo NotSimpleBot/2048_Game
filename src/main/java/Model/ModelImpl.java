@@ -184,8 +184,19 @@ public class ModelImpl implements Model {
         return gameTiles;
     }
 
-    @Override   
+    @Override
     public boolean canMove() {
+        for (int i = 0; i < FIELD_SIZE - 1; i++) {
+            for (int j = 0; j < FIELD_SIZE - 1; j++) {
+                if (!getEmptyTilesFrom_gameTiles().isEmpty()) {
+                    return true;
+                }
+                if (gameTiles[i][j].getValue() == gameTiles[i][j + 1].getValue()
+                        || gameTiles[i][j].getValue() == gameTiles[i + 1][j].getValue()){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

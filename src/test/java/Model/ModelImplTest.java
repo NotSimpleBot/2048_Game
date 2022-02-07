@@ -3,9 +3,11 @@ package Model;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.*;
 
 public class ModelImplTest {
     private Tile[] lineTilesTest;
@@ -26,6 +28,10 @@ public class ModelImplTest {
                 {new Tile(4), new Tile(4), new Tile(), new Tile()},
                 {new Tile(), new Tile(), new Tile(), new Tile()},
                 {new Tile(), new Tile(), new Tile(), new Tile()}};
+//        gameTiles = new Tile[][]{{new Tile(4), new Tile(256), new Tile(4), new Tile(2)},
+//                                {new Tile(8), new Tile(2), new Tile(16), new Tile(32)},
+//                                {new Tile(2), new Tile(4), new Tile(2), new Tile(16)},
+//                                {new Tile(8), new Tile(256), new Tile(32), new Tile(128)}};
 
     }
 
@@ -67,6 +73,12 @@ public class ModelImplTest {
             System.out.println();
         }
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void canMoveTest(){
+        boolean actual = canMove();
+        assertFalse(actual);
     }
 
 
@@ -155,5 +167,41 @@ public class ModelImplTest {
             gameTilesCopy = tempTiles;
         }
         return gameTilesCopy;
+    }
+
+    /**
+     * Проверка возможности сделать ход на игровом поле (смерджить или сместить)
+     */
+    public boolean canMove() {
+        for (int i = 0; i < 4 - 1; i++) {
+            for (int j = 0; j < 4 - 1; j++) {
+                if (!getEmptyTilesFrom_gameTiles().isEmpty()) {
+                    return true;
+                }
+                if (gameTiles[i][j].getValue() == gameTiles[i][j + 1].getValue()
+                        || gameTiles[i][j].getValue() == gameTiles[i + 1][j].getValue()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Поиск плиток в массиве с незаданным значением value (=0).
+     *
+     * @return list с пустыми плитками
+     */
+    private List<Tile> getEmptyTilesFrom_gameTiles() {
+        List<Tile> emptyTilesList = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                Tile tileTmp = gameTiles[i][j];
+                if (Objects.nonNull(tileTmp) && tileTmp.isEmpty()) {
+                    emptyTilesList.add(tileTmp);
+                }
+            }
+        }
+        return emptyTilesList;
     }
 }
