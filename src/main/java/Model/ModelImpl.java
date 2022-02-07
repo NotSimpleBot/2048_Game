@@ -17,6 +17,8 @@ public class ModelImpl implements Model {
 
     @Override
     public void resetGameTiles() {
+        score = 0;
+        maxTailValue = 0;
         gameTiles = new Tile[FIELD_SIZE][FIELD_SIZE];
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
@@ -192,11 +194,25 @@ public class ModelImpl implements Model {
                     return true;
                 }
                 if (gameTiles[i][j].getValue() == gameTiles[i][j + 1].getValue()
-                        || gameTiles[i][j].getValue() == gameTiles[i + 1][j].getValue()){
+                        || gameTiles[i][j].getValue() == gameTiles[i + 1][j].getValue()) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    @Override
+    public int getGameScore() {
+        return score;
+    }
+    @Override
+    public int getMaxTileValue() {
+        return maxTailValue;
+    }
+
+    @Override
+    public void setMaxTileValue(int value) {
+        maxTailValue = value;
     }
 }
