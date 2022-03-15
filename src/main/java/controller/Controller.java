@@ -1,8 +1,8 @@
-package Controller;
+package controller;
 
-import Model.Model;
+import model.Model;
 import View.View;
-import Model.Tile;
+import model.Tile;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -29,27 +29,31 @@ public class Controller extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            model.resetGameTiles();
+            resetGame();
         }
         if (!model.canMove()) {
             view.setGameLoose(true);
         }
-        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            model.left();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            model.right();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            model.up();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            model.down();
-        }
+        if (!view.isGameLoose() && !view.isGameWon()) {
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                model.left();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                model.right();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                model.up();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                model.down();
+            }
 
-        if (model.getMaxTileValue() == WINNING_TILE) {
-            view.setGameWon(true);
+            if (model.getMaxTileValue() == WINNING_TILE) {
+                view.setGameWon(true);
+            }
+
         } else {
+            System.out.println("1");
             resetGame();
         }
         view.repaint();

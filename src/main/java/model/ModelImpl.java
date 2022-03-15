@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,23 +129,23 @@ public class ModelImpl implements Model {
 
     @Override
     public void right() {
-        rotateTo90_gameTiles(2);
+        gameTiles = rotateTo90_gameTiles(2);
         left();
-        rotateTo90_gameTiles(2);
+        gameTiles = rotateTo90_gameTiles(2);
     }
 
     @Override
     public void up() {
-        rotateTo90_gameTiles(3);
+        gameTiles = rotateTo90_gameTiles(3);
         left();
-        rotateTo90_gameTiles(1);
+        gameTiles = rotateTo90_gameTiles(1);
     }
 
     @Override
     public void down() {
-        rotateTo90_gameTiles(1);
+        gameTiles = rotateTo90_gameTiles(1);
         left();
-        rotateTo90_gameTiles(3);
+        gameTiles = rotateTo90_gameTiles(3);
     }
 
     /**
@@ -206,6 +206,7 @@ public class ModelImpl implements Model {
     public int getGameScore() {
         return score;
     }
+
     @Override
     public int getMaxTileValue() {
         return maxTailValue;
