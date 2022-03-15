@@ -35,4 +35,20 @@ public class View extends JPanel {
         // TODO: 07.02.2022  
         return 0;
     }
+
+    public boolean isGameLoose() {
+        return gameLoose;
+    }
+
+    public void setGameLoose(boolean gameLoose) {
+        this.gameLoose = gameLoose;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public void setGameWon(boolean gameWon) {
+        this.gameWon = gameWon;
+    }
 }

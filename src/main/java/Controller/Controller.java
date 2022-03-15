@@ -2,6 +2,7 @@ package Controller;
 
 import Model.Model;
 import View.View;
+import Model.Tile;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -20,7 +21,8 @@ public class Controller extends KeyAdapter {
      * Полный сброс игры
      */
     private void resetGame() {
-        // TODO: 07.02.2022
+        view.setGameWon(false);
+        view.setGameLoose(false);
         model.resetGameTiles();
     }
 
@@ -30,9 +32,8 @@ public class Controller extends KeyAdapter {
             model.resetGameTiles();
         }
         if (!model.canMove()) {
-            // TODO: 07.02.2022
+            view.setGameLoose(true);
         }
-        if (// TODO: 07.02.2022  ){
         if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             model.left();
         }
@@ -47,13 +48,32 @@ public class Controller extends KeyAdapter {
         }
 
         if (model.getMaxTileValue() == WINNING_TILE) {
-            // TODO: 07.02.2022
+            view.setGameWon(true);
         } else {
             resetGame();
         }
-        // TODO: 07.02.2022  
+        view.repaint();
     }
 
+    /**
+     * Получить текущее положение плиток в виде массива
+     */
+    public Tile[][] getGameTiles() {
+        return model.getGameTiles();
+    }
 
+    /**
+     * Получить текущее кол-во очков
+     */
+    public int getScore() {
+        return model.getGameScore();
+    }
+
+    /**
+     * Геттер для view
+     */
+    public View getView() {
+        return view;
+    }
 }
-}
+
